@@ -1,0 +1,29 @@
+Array coordinates Autel & Phantom: [51.51878 5.85821];
+Array angle: 30 deg
+
+Array coordinates others: [52.170556 4.415278];
+Array angle: 40 deg
+
+Broken Mics: [1 17 21 41 63 64]
+
+Start times microphone array measurements (HH:mm:ss.SSS):
+Autel-EVO-II: 14:07:06.364
+Phantom-4: 10:07:39.821
+ANWB: 10:38:14.763
+ATMOS: 12:16:11.112
+Altura: 13:16:30.447
+
+Start times selected segments in microphone array measurements (duration is 5 seconds for all):
+Autel-EVO-II: 66 seconds
+Phantom-4: 63.5 seconds
+ANWB: 140 seconds
+ATMOS: 88.5 seconds
+Altura: 140 seconds
+
+Start times GPS:
+Autel-EVO-II: 14:07:07
+Phantom-4: 10:07:11
+ANWB: 10:38:33.899996 (Can also be found in GPS file)
+ATMOS: 12:09:15 (Can also be found in GPS file)
+Altura: 13:09:12 (Can also be found in GPS file) 
+
