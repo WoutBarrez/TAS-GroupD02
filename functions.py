@@ -1,5 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import numpy as np
+from values import *
 
 def read(drone_name):
     values_gps = 'gps/GPS/'+drone_name+'_GPS.csv' #reading file for the gps
@@ -28,8 +30,6 @@ def read_mic_positions():
 
     return x_positions,y_positions #returns name index and the pandas read of gps values
 
-print(read_mic_positions())
-
 def plot_coordinates(x_positions, y_positions):
     plt.figure(figsize=(8, 6))  # Adjust the figure size as needed
     plt.scatter(x_positions, y_positions, color='blue', label='Positions')
@@ -40,6 +40,31 @@ def plot_coordinates(x_positions, y_positions):
     plt.legend()
     plt.show()
 
-#def rotate_positions()
+def rotate_positions(x_positions, y_positions, drone):
+    new_x_positions=[]
+    new_y_positions=[]
+    #angle=-np.pi/180*1
+    angle=-array_angle[drone]*np.pi/180
+    for i in range(len(x_positions)):
+        new_x_positions.append(x_positions[i]*np.cos(angle)-y_positions[i]*np.sin(angle))
+        new_y_positions.append(x_positions[i]*np.sin(angle)+y_positions[i]*np.cos(angle))
+    
+    return new_x_positions, new_y_positions
+
+
 x_positions, y_positions= read_mic_positions()
-plot_coordinates(x_positions, y_positions)
+
+new_x_positions, new_y_positions = rotate_positions(x_positions, y_positions, "Phantom")
+
+def plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y_positions):
+    plt.figure(figsize=(8, 6))  # Adjust the figure size as needed
+    plt.scatter(x_positions, y_positions, color='blue', label='Positions')
+    plt.scatter(new_x_positions, new_y_positions, color='red', label='Corrected positions')
+    plt.title('Plot of Coordinates')
+    plt.xlabel('X Position')
+    plt.ylabel('Y Position')
+    plt.grid(True)
+    plt.legend()
+    plt.show()
+
+plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y_positions)

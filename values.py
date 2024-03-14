@@ -13,3 +13,13 @@ array_location={
     'ANWB': [52.170556, 4.415278],
     'Atmos': [52.170556, 4.415278]
 }
+
+start_time={ #in seconds, come back to it later as it needs to be figured out
+    'Autel': 66,
+    'Phantom': 63.5,
+    'ANWB': 140,
+    'ATMOS': 88.5,
+    'Altura': 140,
+}
+
+broken_mics=[1, 17, 21, 41, 63, 64]
