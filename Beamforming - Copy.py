@@ -1,7 +1,7 @@
 import numpy as np
 import csv
 import matplotlib.pyplot as plt
-import time
+#import time
 
 #Transform microphone positions to spherical coordinates
 
@@ -55,14 +55,14 @@ def get_conjugate(x):
 
 #Define constants
 C = 343 #m/s - speed of sound
-F = 250 #Hz - frequency obtained from spectogram
+F = 300 #Hz - frequency obtained from spectogram
 R = 1 #m - the radius of the hemisphere
 
 #Read pressure measurements
 
 p = [] 
 
-with open("D:\carti2022\Python\Altura.csv", newline='') as drone_file:
+with open("D:\carti2022\Python\ANWB.csv", newline='') as drone_file:
     reader = csv.reader(drone_file)
     for row in reader:
         if len(row[0])==0:
@@ -115,7 +115,7 @@ for i in range(len(grid)):
 
 for i in range(0, len(p)-4096, 2048):
     #start = time.time()
-    p_fft = np.fft.fft(p[i:4096].T)
+    p_fft = np.fft.fft(p[i:i+4096].T)
     p_star = np.conj(p_fft)
     #end1 = time.time()
     #for k in range(len(p_fft)):
@@ -132,7 +132,7 @@ for i in range(0, len(p)-4096, 2048):
     b = np.reshape(b,(len(y_axis)-1,len(x_axis)-1))
     fig, ax = plt.subplots()
     ax.pcolormesh(x_axis, y_axis, b)
-    fig.canvas.manager.set_window_title(f"Time instant {0.00002*(i)}")
+    fig.canvas.manager.set_window_title(f"Time instant {0.00002*i}")
     plt.show()
         #end2 = time.time()
         #print(end1 - start, end2 - end1)
