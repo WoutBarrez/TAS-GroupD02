@@ -35,6 +35,8 @@ def rotate_positions(x_positions, y_positions, drone):
 
 x_positions, y_positions= read_mic_positions()
 
+plot_coordinates(x_positions, y_positions)
+
 new_x_positions, new_y_positions = rotate_positions(x_positions, y_positions, "Phantom")
 
 def plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y_positions):
