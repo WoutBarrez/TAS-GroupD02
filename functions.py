@@ -13,10 +13,10 @@ def read_mic_positions():
 
 def plot_coordinates(x_positions, y_positions):
     plt.figure(figsize=(8, 6))  # Adjust the figure size as needed
-    plt.scatter(x_positions, y_positions, color='blue', label='Positions')
-    plt.title('Plot of Coordinates')
-    plt.xlabel('X Position')
-    plt.ylabel('Y Position')
+    plt.scatter(x_positions, y_positions, color='blue', label='Microphone')
+    plt.title('Microphone Array')
+    plt.xlabel('X Position [m]')
+    plt.ylabel('Y Position [m]')
     plt.grid(True)
     plt.legend()
     plt.show()
@@ -35,8 +35,6 @@ def rotate_positions(x_positions, y_positions, drone):
 
 x_positions, y_positions= read_mic_positions()
 
-plot_coordinates(x_positions, y_positions)
-
 new_x_positions, new_y_positions = rotate_positions(x_positions, y_positions, "Phantom")
 
 def plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y_positions):
@@ -44,10 +42,24 @@ def plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y
     plt.scatter(x_positions, y_positions, color='blue', label='Positions')
     plt.scatter(new_x_positions, new_y_positions, color='red', label='Corrected positions')
     plt.title('Plot of Coordinates')
-    plt.xlabel('X Position')
-    plt.ylabel('Y Position')
+    plt.xlabel('X Position [m]')
+    plt.ylabel('Y Position [m]')
     plt.grid(True)
     plt.legend()
     plt.show()
 
-plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y_positions)
+plot_coordinates(x_positions, y_positions)
+    
+def convert_to_polar(x_positions, y_positions):
+
+    theta=[] #position angle
+
+    for i in range(len(x_positions)):
+        x_position=x_positions[i]
+        y_position=y_positions[i]
+
+        theta.append(np.arctan2(y_position, x_position)*180/np.pi) #x1=y, x2=x
+
+    return theta
+
+print(convert_to_polar(x_positions,y_positions))

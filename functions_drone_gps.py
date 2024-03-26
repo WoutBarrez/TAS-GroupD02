@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from values import *
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 def read(drone_name):
     values_gps = 'gps/GPS_consistent/'+drone_name+'_GPS.csv' #reading file for the gps
@@ -22,11 +23,13 @@ def avoid_errors(gps_read):
 
     return df_filtered
 
-def give_and_convert_coordinates(gps_read, drone_name):
+def give_and_convert_coordinates_mercator(gps_read, drone_name):
 
     latitudes = gps_read['Latitude'].tolist()
     longitudes = gps_read['Longitude'].tolist()
     altitudes = gps_read['Altitude'].tolist()
+    time = gps_read['Time'].tolist()
+
 
     lat0=array_location[drone_name][0]
     lon0=array_location[drone_name][1]
@@ -39,10 +42,43 @@ def give_and_convert_coordinates(gps_read, drone_name):
         lon=longitudes[i]
         lat=latitudes[i]
 
-        x.append((lon-lon0)*40000*np.cos((lat+lat0)*np.pi/360)/360)
-        y.append((lat-lat0)*40000/360)
+        x.append((lon-lon0)*40000000*np.cos((lat+lat0)*np.pi/360)/360)
+        y.append((lat-lat0)*40000000/360)
 
-    return x,y, altitudes
+    return x,y, altitudes, time
+
+def give_and_convert_coordinates_haversine(gps_read, drone_name):
+
+    latitudes = gps_read['Latitude'].tolist()
+    longitudes = gps_read['Longitude'].tolist()
+    altitudes = gps_read['Altitude'].tolist()
+    time = gps_read['Time'].tolist()
+
+    rad=6363564.387500839
+
+
+    lat0=array_location[drone_name][0]*np.pi/180
+    lon0=array_location[drone_name][1]*np.pi/180
+
+    x=[]
+    y=[]
+
+    for i in range(len(latitudes)):
+
+        lon=longitudes[i]*np.pi/180
+        lat=latitudes[i]*np.pi/180
+
+        dLat=(lat-lat0)
+        dLon=(lon-lon0)
+
+        x_value=rad*np.cos(lat0)*np.sin(dLon)
+        y_value=rad*np.sin(dLat)
+
+        x.append(x_value)
+        y.append(y_value)
+
+    return x,y, altitudes, time
+
 
 def rotate_positions(x_positions, y_positions, drone):
     rotated_x_positions=[]
@@ -59,6 +95,7 @@ def convert_to_polar(x_positions, y_positions, altitudes):
 
     theta=[] #position angle
     phi=[] #elevation angle
+    ranges=[]
 
     for i in range(len(x_positions)):
         altitude=altitudes[i]
@@ -67,11 +104,35 @@ def convert_to_polar(x_positions, y_positions, altitudes):
 
         horizontal_distance=(x_position**2+y_position**2)**(1/2)
 
+        r=(horizontal_distance**2+altitude**2)**(1/2)
+
+        ranges.append(r)
+
         phi.append(np.arctan(altitude/horizontal_distance)*180/np.pi)
 
         theta.append(np.arctan2(y_position, x_position)*180/np.pi) #x1=y, x2=x
 
-    return theta, phi
+    return theta, phi, ranges
+
+def take_sample(x_positions, y_positions, altitudes, time, drone_name):
+    t0=start_time[drone_name]+time[0]
+    t_end=t0+5
+    instances_to_remove=[]
+    instances_to_not_remove=[]
+    removed_counter=0
+    for instance in range(len(time)):
+        if time[instance]<t0 or time[instance]>t_end:
+            instances_to_remove.append(instance)
+        else:
+            instances_to_not_remove.append(instance)
+    for instance in instances_to_remove:
+        time.pop(instance-removed_counter)
+        x_positions.pop(instance-removed_counter)
+        y_positions.pop(instance-removed_counter)
+        altitudes.pop(instance-removed_counter)
+        removed_counter=removed_counter+1
+    
+    return x_positions, y_positions, altitudes, time
 
 
 def plot_coordinates(x_positions, y_positions):
@@ -94,3 +155,11 @@ def plot_coordinates_comparison(x_positions, y_positions, new_x_positions, new_y
     plt.grid(True)
     plt.legend()
     plt.show()
+
+
+def save_data_to_csv(time, theta, phi, drone):
+    data = {'Time': time,
+            'Theta': theta,
+            'Phi': phi}
+    df = pd.DataFrame(data)
+    df.to_csv("polar_data/"+drone+".csv", index=False)
