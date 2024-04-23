@@ -10,13 +10,13 @@ gps_read=avoid_errors(gps_read)
 
 x_haversine, y_haversine, altitudes, time= give_and_convert_coordinates_haversine(gps_read, drone)
 
-#x_haversine, y_haversine, altitudes, time= take_sample(x_haversine, y_haversine, altitudes, time, drone)
+x_haversine, y_haversine, altitudes, time= take_sample(x_haversine, y_haversine, altitudes, time, drone)
 
 #old
 
 x_mercator, y_mercator, altitudes, time= give_and_convert_coordinates_mercator(gps_read, drone)
 
-#x_mercator, y_mercator, altitudes, time= take_sample(x_mercator, y_mercator, altitudes, time, drone)
+x_mercator, y_mercator, altitudes, time= take_sample(x_mercator, y_mercator, altitudes, time, drone)
 
 
 #rotated_x_positions, rotated_y_positions = rotate_positions(x_positions, y_positions, drone)
