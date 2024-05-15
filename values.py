@@ -1,5 +1,5 @@
 array_angle={
-    'Autel': 30,
+    'Autel_Evo': 30,
     'Phantom': 30,
     'Altura': 40,
     'ANWB': 40,
@@ -7,7 +7,7 @@ array_angle={
 }
 
 array_location={
-    'Autel': [51.51878, 5.85821],
+    'Autel_Evo': [51.51878, 5.85821],
     'Phantom': [51.51878, 5.85821],
     'Altura': [52.170556, 4.415278],
     'ANWB': [52.170556, 4.415278],
@@ -15,7 +15,7 @@ array_location={
 }
 
 start_time={ #in seconds, come back to it later as it needs to be figured out
-    'Autel': 66,
+    'Autel_Evo': 66,
     'Phantom': 63.5,
     'ANWB': 140,
     'ATMOS': 88.5,

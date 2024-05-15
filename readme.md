@@ -6,4 +6,4 @@ Update codebase
 
 Get new code
 
-git pull
+1. git pull
